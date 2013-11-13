@@ -1,4 +1,7 @@
-== Design Patterns Labs
+Design Patterns Labs
+=========
+
+## Provided Java Code
 
 This project provides few basic classes to be used during the "Design Pattern" labs.
 
