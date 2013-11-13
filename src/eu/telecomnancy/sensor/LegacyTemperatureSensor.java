@@ -15,7 +15,7 @@ public class LegacyTemperatureSensor extends Thread {
      */
     public boolean onOff() {
         state = !state;
-        if (state) {
+        if (state && !isAlive()) {   // on démarre le thread la première fois
             this.start();
         }
         return state;
@@ -45,9 +45,10 @@ public class LegacyTemperatureSensor extends Thread {
      * Caution! This method should not be directly called (Please call onOff() method instead).
      */
     public void run() {
-        while (state) {
+        while (true) {
             double random = (new Random()).nextDouble();
-            value = start + (random * (end - start));
+            if (state)                                      // on change la valeur uniquement si l'état est actif
+                value = start + (random * (end - start));
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
