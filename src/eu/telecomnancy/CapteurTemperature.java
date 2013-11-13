@@ -9,10 +9,10 @@ import java.util.Random;
  * Time: 10:05
  */
 public class CapteurTemperature extends Thread {
-    boolean state=false;
-    double start=-20;
-    double end=100;
-    double value;
+    private boolean state=false;
+    private double start=-20;
+    private double end=100;
+    private double value;
     public boolean onOff() {
         state=!state;
         if (state) this.start();
@@ -29,7 +29,7 @@ public class CapteurTemperature extends Thread {
             double random = (new Random()).nextDouble();
             value = start + (random * (end - start));
             try {
-                Thread.sleep(1000);
+                sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
