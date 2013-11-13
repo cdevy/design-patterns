@@ -28,7 +28,7 @@ public class Client {
 
     public void menu() throws RemoteException {
         char rep='q';
-        while (!'q'.equals(rep)) {
+        while (!('q' == rep)) {
             try {
                 rep= c.nextLine().charAt(0);
                 switch (rep) {
