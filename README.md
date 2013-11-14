@@ -3,7 +3,7 @@ Design Patterns Labs
 
 ## Provided Java Code
 
-This project provides few basic classes to be used during the "Design Pattern" labs.
+This project provides few basic classes to be used during the "Design Pattern" labs.  
 
 
 #### Core classes
@@ -16,11 +16,11 @@ This project provides few basic classes to be used during the "Design Pattern" l
 #### Command line client application
 
 <code>eu.telecomnancy.App</code>: A basic command line interface (CLI) to control a temperature sensor (implementing <code>ISensor</code> interface).  
-<code>eu.telecomnancy.ui.ConsoleUI</code>: A class that manages command line user interaction.
+<code>eu.telecomnancy.ui.ConsoleUI</code>: A class that manages command line user interaction.  
 
 #### Swing client application
 
-<code>eu.telecomnancy.SwingApp</code>: A basic Swing application that displays a temperature sensor (implementing <code>ISensor</code> interface).
+<code>eu.telecomnancy.SwingApp</code>: A basic Swing application that displays a temperature sensor (implementing <code>ISensor</code> interface).  
 <code>eu.telecomnancy.ui.SensorWindow</code>: A tiny sensor view that provides some basic controls.  
 <code>eu.telecomnancy.ui.MainWindow</code>: The main window of the swing application that display only one sensor view.  
 
