@@ -2,23 +2,29 @@ package eu.telecomnancy.sensor;
 
 import java.util.Random;
 
-public class LegacyTemperatureSensor extends Thread {
+public class LegacyTemperatureSensor {
     private boolean state = false;
     private double start = -20;
     private double end = 100;
     private double value;
+    private AcquiringThread worker = null;
 
     /**
      * Enable/disable the sensor.
      *
      * @return the current sensor status.
      */
-    public boolean onOff() {
-        state = !state;
-        if (state && !isAlive()) {   // on démarre le thread la première fois
-            this.start();
+    public synchronized boolean onOff() {
+        this.state = ! this.state;
+        if (this.state) {
+            this.worker = new AcquiringThread();
+            this.worker.start();
+        } else {
+            this.worker.disable();
+            this.worker = null;
         }
-        return state;
+
+        return this.state;
     }
 
     /**
@@ -36,24 +42,31 @@ public class LegacyTemperatureSensor extends Thread {
      * @return the latest recorded temperature.
      */
     public double getTemperature() {
-        return value;
+        return this.value;
     }
 
-    @Override
-    /**
-     * Start the internal worker to acquire a new temperature value every 1s.
-     * Caution! This method should not be directly called (Please call onOff() method instead).
-     */
-    public void run() {
-        while (true) {
-            double random = (new Random()).nextDouble();
-            if (state)                                      // on change la valeur uniquement si l'état est actif
+    private class AcquiringThread extends Thread {
+        private boolean active = true;
+
+        /**
+         * Stop the acquiring thread. There is no way to start it again ;)
+         */
+        public void disable() {
+            this.active = false;
+        }
+
+        @Override
+        public void run() {
+            while (this.active) {
+                double random = (new Random()).nextDouble();
                 value = start + (random * (end - start));
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
+
 }
