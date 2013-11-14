@@ -17,3 +17,9 @@ This project provides few basic classes to be used during the "Design Pattern" l
 * <code>eu.telecomnancy.ui.SensorWindow</code>: A tiny sensor view that provides some basic controls.
 * <code>eu.telecomnancy.ui.MainWindow</code>: The main window of the swing application that display only one sensor view.
 
+
+## UML Class Diagram
+
+![UML class diagram of the provided code](uml/class-diagram.png)
+
+![UML class diagram of the legacy code to be integrated](uml/legacy-class-diagram.png)
