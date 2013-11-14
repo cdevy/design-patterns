@@ -24,6 +24,10 @@ This project provides few basic classes to be used during the "Design Pattern" l
 <code>eu.telecomnancy.ui.SensorWindow</code>: A tiny sensor view that provides some basic controls.  
 <code>eu.telecomnancy.ui.MainWindow</code>: The main window of the swing application that display only one sensor view.  
 
+#### Helper Classes
+
+<code>eu.telecomnancy.ReadPropertyFile</code>: A class to show how to read a property file in the class path
+
 ## UML Class Diagrams
 
 #### Class diagram of the provided code
