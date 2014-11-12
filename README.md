@@ -34,6 +34,8 @@ This project provides few basic classes to be used during the "Design Pattern" l
 
 ![UML class diagram of the provided code](https://bytebucket.org/telecomnancy-pcd/design-patterns-lab/raw/c75905ab438c893770f196fb18c57c1344877169/uml/class-diagram.png)
 
+Please note that some elements appear to be attributes, but, in fact, they are preceded by a `P` icon indicating they are considered as properties (meaning a setter and a getter methods are provided). For instance, in the `ISensor` interface, there is a value property which means the interface provides `getValue()` et `setValue(double value)` methods but not necessary a `value` attribute.  
+
 #### Class diagram of the legacy code to be integrated in your app
 
 ![UML class diagram of the legacy code to be integrated](https://bytebucket.org/telecomnancy-pcd/design-patterns-lab/raw/c75905ab438c893770f196fb18c57c1344877169/uml/legacy-class-diagram.png)
