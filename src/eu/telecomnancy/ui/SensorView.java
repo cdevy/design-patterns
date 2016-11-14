@@ -28,21 +28,21 @@ public class SensorView extends JPanel {
 
 
         on.addActionListener(new ActionListener() {
-            @Override
+       
             public void actionPerformed(ActionEvent e) {
                 sensor.on();
             }
         });
 
         off.addActionListener(new ActionListener() {
-            @Override
+            
             public void actionPerformed(ActionEvent e) {
                 sensor.off();
             }
         });
 
         update.addActionListener(new ActionListener() {
-            @Override
+            
             public void actionPerformed(ActionEvent e) {
                 try {
                     sensor.update();

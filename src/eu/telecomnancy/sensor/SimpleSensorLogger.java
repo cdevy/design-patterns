@@ -7,7 +7,6 @@ package eu.telecomnancy.sensor;
  * Time: 18:16
  */
 public class SimpleSensorLogger implements SensorLogger {
-    @Override
     public void log(LogLevel level, String message) {
         System.out.println(level.name() + " " + message);
     }
