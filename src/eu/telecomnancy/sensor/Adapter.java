@@ -57,8 +57,6 @@ public class Adapter extends LegacyTemperatureSensor implements ISensor {
 	public void notifyObserver() {
 		if (observer != null) {
 			observer.update();
-		} else {
-			System.out.println("Error : there is no observer attached to Adapter.");
 		}
 	}
 }

@@ -5,8 +5,8 @@ import java.util.Random;
 import eu.telecomnancy.ui.Observer;
 
 public class TemperatureSensor implements ISensor {
-    boolean state;
-    double value = 0;
+    private boolean state;
+    private double value = 0;
     private Observer observer;
 
     public void on() {
@@ -54,8 +54,6 @@ public class TemperatureSensor implements ISensor {
 	public void notifyObserver() {
 		if (observer != null) {
 			observer.update();
-		} else {
-			System.out.println("Error : there is no observer attached to Adapter.");
 		}
 	}
 }
