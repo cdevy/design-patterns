@@ -7,8 +7,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.NumberFormat;
 
-public class SensorView extends JPanel {
+@SuppressWarnings("serial")
+public class SensorView extends JPanel implements Observer {
     private ISensor sensor;
 
     private JLabel value = new JLabel("N/A °C");
@@ -18,6 +20,8 @@ public class SensorView extends JPanel {
 
     public SensorView(ISensor c) {
         this.sensor = c;
+        sensor.attach(this);
+        
         this.setLayout(new BorderLayout());
 
         value.setHorizontalAlignment(SwingConstants.CENTER);
@@ -60,4 +64,14 @@ public class SensorView extends JPanel {
 
         this.add(buttonsPanel, BorderLayout.SOUTH);
     }
+
+	public void update() {
+		try {
+		    NumberFormat numberFormat = NumberFormat.getInstance(java.util.Locale.FRENCH);
+		    numberFormat.setMaximumFractionDigits(2);
+			value.setText(numberFormat.format(sensor.getValue()) + " °C");
+		} catch (SensorNotActivatedException e) {
+			e.printStackTrace();
+		}
+	}
 }

@@ -5,6 +5,7 @@ import eu.telecomnancy.sensor.ISensor;
 import javax.swing.*;
 import java.awt.*;
 
+@SuppressWarnings("serial")
 public class MainWindow extends JFrame {
 
     private ISensor sensor;

@@ -1,6 +1,6 @@
 package eu.telecomnancy.sensor;
 
-public interface ISensor {
+public interface ISensor extends Observable {
     /**
      * Enable the sensor.
      */

@@ -8,7 +8,8 @@ import eu.telecomnancy.ui.ConsoleUI;
 public class App {
 
     public static void main(String[] args) {
-        ISensor sensor = new TemperatureSensor();
+        @SuppressWarnings("unused")
+		ISensor sensor = new TemperatureSensor();
         ISensor adaptedSensor = new Adapter();
         //new ConsoleUI(sensor);
         new ConsoleUI(adaptedSensor);
