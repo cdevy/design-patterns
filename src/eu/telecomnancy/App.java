@@ -3,6 +3,7 @@ package eu.telecomnancy;
 import eu.telecomnancy.sensor.Adapter;
 import eu.telecomnancy.sensor.ISensor;
 import eu.telecomnancy.sensor.NewSensor;
+import eu.telecomnancy.sensor.SensorProxy;
 import eu.telecomnancy.sensor.TemperatureSensor;
 import eu.telecomnancy.ui.ConsoleUI;
 
@@ -13,10 +14,14 @@ public class App {
 		ISensor sensor = new TemperatureSensor();
         @SuppressWarnings("unused")
 		ISensor adaptedSensor = new Adapter();
+        @SuppressWarnings("unused")
         ISensor newSensor = new NewSensor();
+        ISensor proxySensor = new SensorProxy(new TemperatureSensor());
+        
         //new ConsoleUI(sensor);
         //new ConsoleUI(adaptedSensor);
-        new ConsoleUI(newSensor);
+        //new ConsoleUI(newSensor);
+        new ConsoleUI(proxySensor);
     }
 
 }
