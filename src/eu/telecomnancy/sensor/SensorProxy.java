@@ -69,9 +69,9 @@ public class SensorProxy implements ISensor {
 	public void update() throws SensorNotActivatedException {
 		if (sensor != null) {
 			if (sensor.getStatus()) {
-				sensor.update();
 				now = LocalDateTime.now();
 				logger.log(LogLevel.INFO, dtf.format(now) + ", update(), void");
+				sensor.update();
 			} else throw new SensorNotActivatedException("Sensor must be activated to get its value.");	
 		}
 	}
