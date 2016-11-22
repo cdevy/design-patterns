@@ -7,12 +7,13 @@ import java.time.format.DateTimeFormatter;
 public class SensorProxy implements ISensor {
 	
 	private ISensor sensor;
-	private SensorLogger logger = new SimpleSensorLogger();
+	private SensorLogger logger;
 	private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 	private LocalDateTime now;
 	
 	public SensorProxy(ISensor sensor) {
 		this.sensor = sensor;
+		logger = new SimpleSensorLogger();
 	}
 
 	public void attach(Observer o) {
@@ -67,18 +68,22 @@ public class SensorProxy implements ISensor {
 
 	public void update() throws SensorNotActivatedException {
 		if (sensor != null) {
-			sensor.update();
-			now = LocalDateTime.now();
-			logger.log(LogLevel.INFO, dtf.format(now) + ", update(), void");
+			if (sensor.getStatus()) {
+				sensor.update();
+				now = LocalDateTime.now();
+				logger.log(LogLevel.INFO, dtf.format(now) + ", update(), void");
+			} else throw new SensorNotActivatedException("Sensor must be activated to get its value.");	
 		}
 	}
 
 	public double getValue() throws SensorNotActivatedException {
 		double res = 0;
 		if (sensor != null) {
-			res = sensor.getValue();
-			now = LocalDateTime.now();
-			logger.log(LogLevel.INFO, dtf.format(now) + ", getValue(), " + res);	
+			if (sensor.getStatus()) {
+				res = sensor.getValue();
+				now = LocalDateTime.now();
+				logger.log(LogLevel.INFO, dtf.format(now) + ", getValue(), " + res);
+			} else throw new SensorNotActivatedException("Sensor must be activated to get its value.");	
 		}	
 		return res;
 	}
