@@ -77,7 +77,7 @@ public class SensorProxy implements ISensor {
 	}
 
 	public double getValue() throws SensorNotActivatedException {
-		double res = 0;
+		double res = -1;
 		if (sensor != null) {
 			if (sensor.getStatus()) {
 				res = sensor.getValue();
