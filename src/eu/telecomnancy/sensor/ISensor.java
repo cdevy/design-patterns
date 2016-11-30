@@ -1,5 +1,6 @@
 package eu.telecomnancy.sensor;
 
+
 public interface ISensor extends Observable {
     /**
      * Enable the sensor.
@@ -32,5 +33,22 @@ public interface ISensor extends Observable {
      * @throws SensorNotActivatedException if the sensor is not activated.
      */
     public double getValue() throws SensorNotActivatedException;
+    
+    /**
+     * Set the value recorded by the sensor.
+     */
+    public void setValue(double value);
+    
+    /**
+     * Get the temperature scale used by the sensor.
+     *
+     * @return the temperature scale.
+     */
+    public TemperatureScale getScale();
+
+    /**
+     * Set the temperature scale used by the sensor.
+     */
+	public void setScale(TemperatureScale scale);
 
 }

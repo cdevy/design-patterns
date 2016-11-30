@@ -1,32 +1,28 @@
 package eu.telecomnancy.sensor;
 
-import eu.telecomnancy.ui.TemperatureScale;
 
 public class DecoratorFahrenheit extends Decorator {
 	
-	private TemperatureScale scale;
-	
 	public DecoratorFahrenheit(ISensor sensor) {
 		super(sensor);
-		scale = TemperatureScale.CELSIUS;
 	}
 	
-	public double switchType(double oldValue) {
-		if (scale.equals(TemperatureScale.CELSIUS)) {
-			scale = TemperatureScale.FAHRENHEIT;
-			if (oldValue != -1)
-				return 1.8*oldValue + 32;
+	public void switchType() {
+		if (getScale().equals(TemperatureScale.CELSIUS)) {
+			setScale(TemperatureScale.FAHRENHEIT);
+			try {
+				setValue(1.8*getValue() + 32);
+			} catch (SensorNotActivatedException e) {
+				e.printStackTrace();
+			}
 			
 		} else {
-			scale = TemperatureScale.CELSIUS;
-			if (oldValue != -1)
-				return (oldValue - 32)/1.8;
+			setScale(TemperatureScale.CELSIUS);
+			try {
+				setValue((getValue() - 32)/1.8);
+			} catch (SensorNotActivatedException e) {
+				e.printStackTrace();
+			}
 		}
-		return -1;
 	}
-	
-	public TemperatureScale getScale() {
-		return scale;
-	}
-
 }

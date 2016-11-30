@@ -6,15 +6,22 @@ import eu.telecomnancy.ui.Observer;
 
 public class TemperatureSensor implements ISensor {
     private boolean state;
-    private double value = 0;
+    private double value;
+    private TemperatureScale scale;
     private Observer observer;
 
     public void on() {
-        state = true;
+    	if (!state) {
+    		state = true;
+            value = 0;
+            scale = TemperatureScale.CELSIUS;
+    	}
     }
 
     public void off() {
-        state = false;
+    	if (state) {
+    		state = false;
+    	}
     }
 
     public boolean getStatus() {
@@ -34,6 +41,10 @@ public class TemperatureSensor implements ISensor {
             return value;
         else throw new SensorNotActivatedException("Sensor must be activated to get its value.");
     }
+    
+    public void setValue(double value) {
+		this.value = value;
+	}
 
 	public void attach(Observer o) {
 		if (observer == null) {
@@ -55,5 +66,13 @@ public class TemperatureSensor implements ISensor {
 		if (observer != null) {
 			observer.update();
 		}
+	}
+	
+	public TemperatureScale getScale() {
+		return scale;
+	}
+
+	public void setScale(TemperatureScale scale) {
+		this.scale = scale;
 	}
 }

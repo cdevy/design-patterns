@@ -8,7 +8,8 @@ public class NewSensor implements ISensor {
 	
 	private StateSensor state = new StateSensorOff();
 	private Observer observer;
-	private double value = 0;
+	private double value;
+	private TemperatureScale scale;
 
 	public void attach(Observer o) {
 		if (observer == null) {
@@ -33,11 +34,17 @@ public class NewSensor implements ISensor {
 	}
 
 	public void on() {
-		state = new StateSensorOn();
+		if(state instanceof StateSensorOff) {
+			state = new StateSensorOn();
+			value = 0;
+			scale = TemperatureScale.CELSIUS;
+		}
 	}
 
 	public void off() {
-		state = new StateSensorOff();
+		if(state instanceof StateSensorOn) {
+			state = new StateSensorOff();
+		}
 	}
 
 	public boolean getStatus() {
@@ -57,5 +64,17 @@ public class NewSensor implements ISensor {
             return value;
         else throw new SensorNotActivatedException("Sensor must be activated to get its value.");
     }
+    
+    public void setValue(double value) {
+		this.value = value;
+	}
+    
+    public TemperatureScale getScale() {
+		return scale;
+	}
+
+	public void setScale(TemperatureScale scale) {
+		this.scale = scale;
+	}
 
 }

@@ -10,6 +10,7 @@ import java.util.Properties;
  * Time: 21:47
  */
 public class ReadPropertyFile {
+	
     public Properties readFile(String filename) throws IOException {
         Properties p= new Properties();
         p.load(getClass().getResourceAsStream(filename));
@@ -18,7 +19,7 @@ public class ReadPropertyFile {
 
     public static void main(String[] args) throws IOException {
         ReadPropertyFile rp=new ReadPropertyFile();
-        Properties p=rp.readFile("/eu/telecomnancy/commande.properties");
+        Properties p=rp.readFile("/eu/telecomnancy/commands/command.properties");
         for (String i: p.stringPropertyNames()) {
             System.out.println(p.getProperty(i));
         }

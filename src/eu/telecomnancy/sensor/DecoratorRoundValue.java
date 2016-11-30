@@ -8,10 +8,14 @@ public class DecoratorRoundValue extends Decorator {
 	
 	public DecoratorRoundValue(ISensor sensor) {
 		super(sensor);
+		numberFormat.setMaximumFractionDigits(2);
 	}
 	
-	public String round(double oldValue) {
-		numberFormat.setMaximumFractionDigits(2);
-		return numberFormat.format(oldValue);
+	public void round() {
+		try {
+			setValue(Double.parseDouble(numberFormat.format(getValue())));
+		} catch (SensorNotActivatedException e) {
+			e.printStackTrace();
+		}
 	}
 }

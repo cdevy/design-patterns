@@ -1,6 +1,7 @@
 package eu.telecomnancy.sensor;
 
 import eu.telecomnancy.ui.Observer;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -86,6 +87,34 @@ public class SensorProxy implements ISensor {
 			} else throw new SensorNotActivatedException("Sensor must be activated to get its value.");	
 		}	
 		return res;
+	}
+	
+	public void setValue(double value) {
+		if (sensor != null) {
+			if (sensor.getStatus()) {
+				sensor.setValue(value);
+				now = LocalDateTime.now();
+				logger.log(LogLevel.INFO, dtf.format(now) + ", setValue(double value), void");
+			}
+		}
+	}
+	
+	public TemperatureScale getScale() {
+		TemperatureScale res = TemperatureScale.CELSIUS;
+		if (sensor != null) {
+			res = sensor.getScale();
+			now = LocalDateTime.now();
+			logger.log(LogLevel.INFO, dtf.format(now) + ", getScale(), " + res);
+		}	
+		return res;
+	}
+
+	public void setScale(TemperatureScale scale) {
+		if (sensor != null) {
+			sensor.setScale(scale);
+			now = LocalDateTime.now();
+			logger.log(LogLevel.INFO, dtf.format(now) + ", setScale(TemperatureScale scale), void");
+		}
 	}
 
 }

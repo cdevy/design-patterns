@@ -1,5 +1,7 @@
 package eu.telecomnancy.sensor;
 
+import java.time.LocalDateTime;
+
 import eu.telecomnancy.ui.Observer;
 import eu.telecomnancy.ui.SensorView;
 
@@ -64,6 +66,28 @@ public abstract class Decorator implements ISensor {
 			} else throw new SensorNotActivatedException("Sensor must be activated to get its value.");	
 		}
 		return -1;
+	}
+	
+	public void setValue(double value) {
+		if (sensor != null) {
+			if (sensor.getStatus()) {
+				sensor.setValue(value);
+			}
+		}
+	}
+	
+	public TemperatureScale getScale() {
+		TemperatureScale res = TemperatureScale.CELSIUS;
+		if (sensor != null) {
+			res = sensor.getScale();
+		}	
+		return res;
+	}
+
+	public void setScale(TemperatureScale scale) {
+		if (sensor != null) {
+			sensor.setScale(scale);
+		}
 	}
 
 }

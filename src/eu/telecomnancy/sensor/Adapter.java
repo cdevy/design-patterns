@@ -5,16 +5,14 @@ import eu.telecomnancy.ui.Observer;
 public class Adapter extends LegacyTemperatureSensor implements ISensor {
 	
 	private double value;
+	private TemperatureScale scale;
 	private Observer observer;
 
 	public void on() {
 		if (!getStatus()) {
 			onOff();
-			try {
-				update();
-			} catch (SensorNotActivatedException e) {
-				e.printStackTrace();
-			}
+			value = 0;
+			scale = TemperatureScale.CELSIUS;
 		}
 	}
 
@@ -37,6 +35,10 @@ public class Adapter extends LegacyTemperatureSensor implements ISensor {
 			return value;
 		else throw new SensorNotActivatedException("Sensor must be activated to get its value.");
 	}
+	
+	public void setValue(double value) {
+		this.value = value;
+	}
 
 	public void attach(Observer o) {
 		if (observer == null) {
@@ -58,5 +60,13 @@ public class Adapter extends LegacyTemperatureSensor implements ISensor {
 		if (observer != null) {
 			observer.update();
 		}
+	}
+
+	public TemperatureScale getScale() {
+		return scale;
+	}
+
+	public void setScale(TemperatureScale scale) {
+		this.scale = scale;
 	}
 }

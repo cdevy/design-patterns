@@ -1,10 +1,15 @@
 package eu.telecomnancy.ui;
 
-import eu.telecomnancy.sensor.Decorator;
+import eu.telecomnancy.commands.GetSensorValue;
+import eu.telecomnancy.commands.RoundSensorValue;
+import eu.telecomnancy.commands.SwitchSensorScale;
+import eu.telecomnancy.commands.TurnSensorOff;
+import eu.telecomnancy.commands.TurnSensorOn;
+import eu.telecomnancy.commands.UpdateSensor;
 import eu.telecomnancy.sensor.DecoratorFahrenheit;
 import eu.telecomnancy.sensor.DecoratorRoundValue;
 import eu.telecomnancy.sensor.ISensor;
-import eu.telecomnancy.sensor.SensorNotActivatedException;
+import eu.telecomnancy.sensor.TemperatureScale;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,8 +19,6 @@ import java.awt.event.ActionListener;
 @SuppressWarnings("serial")
 public class SensorView extends JPanel implements Observer {
     private ISensor sensor;
-    private Decorator typeDecorator;
-    private Decorator roundDecorator;
 
     private JLabel value = new JLabel("N/A °C");
     private JButton on = new JButton("On");
@@ -24,16 +27,27 @@ public class SensorView extends JPanel implements Observer {
     private JButton switchType = new JButton("Switch to °F");
     private JButton roundValue = new JButton("Round value");
     
-    private TemperatureScale scale; 
+    /* Commands */
+    private TurnSensorOn turnOnCommand;
+    private TurnSensorOff turnOffCommand;
+    private UpdateSensor updateCommand;
+    private SwitchSensorScale switchScaleCommand;
+    private RoundSensorValue roundValueCommand;
+    private GetSensorValue getValueCommand;
 
     public SensorView(ISensor c) {
         this.sensor = c;
         sensor.attach(this);
         
-        typeDecorator = new DecoratorFahrenheit(sensor);
-        scale = ((DecoratorFahrenheit) typeDecorator).getScale();
+        switchType.setEnabled(false);
+    	roundValue.setEnabled(false);
         
-        roundDecorator = new DecoratorRoundValue(sensor);
+        turnOnCommand = new TurnSensorOn(sensor);
+        turnOffCommand = new TurnSensorOff(sensor);
+        updateCommand  = new UpdateSensor(sensor);
+        switchScaleCommand = new SwitchSensorScale(new DecoratorFahrenheit(sensor));
+        roundValueCommand = new RoundSensorValue(new DecoratorRoundValue(sensor));
+        getValueCommand = new GetSensorValue(sensor);
         
         this.setLayout(new BorderLayout());
 
@@ -43,59 +57,49 @@ public class SensorView extends JPanel implements Observer {
 
         this.add(value, BorderLayout.CENTER);
 
-
         on.addActionListener(new ActionListener() {
        
             public void actionPerformed(ActionEvent e) {
-                typeDecorator.on();
+            	turnOnCommand.execute();
+            	update();
+           
+            	switchType.setEnabled(true);
+            	roundValue.setEnabled(true);
             }
         });
 
         off.addActionListener(new ActionListener() {
             
             public void actionPerformed(ActionEvent e) {
-            	typeDecorator.off();
+            	turnOffCommand.execute();
+            	update();
+            	
+            	switchType.setEnabled(false);
+            	roundValue.setEnabled(false);
             }
         });
 
         update.addActionListener(new ActionListener() {
             
             public void actionPerformed(ActionEvent e) {
-                try {
-                	typeDecorator.update();
-                	roundValue.setEnabled(true);
-                } catch (SensorNotActivatedException sensorNotActivatedException) {
-                    sensorNotActivatedException.printStackTrace();
-                }
+            	updateCommand.execute();
+            	
+            	roundValue.setEnabled(true);
             }
         });
         
         switchType.addActionListener(new ActionListener() {
             
             public void actionPerformed(ActionEvent e) {
-            	double oldValue;
-            	if (value.getText().contains("N/A")) {
-            		oldValue = -1;
-            	} else {
-            		oldValue =  Double.parseDouble(value.getText().substring(0, value.getText().length()-3));
-            	}
-            	double newValue = ((DecoratorFahrenheit) typeDecorator).switchType(oldValue);
-            	scale = ((DecoratorFahrenheit) typeDecorator).getScale();
-            	if (scale.equals(TemperatureScale.CELSIUS)) {
-            		if (newValue != -1) {
-            			value.setText(newValue + "°C");
-            		} else {
-            			value.setText("N/A °C");
-            		}	
+            	switchScaleCommand.execute();
+            	update();
+            	
+            	if (sensor.getScale().equals(TemperatureScale.CELSIUS)) {
             		switchType.setText("Switch to °F");
             	} else {
-            		if (newValue != -1) {
-            			value.setText(newValue + "°F");
-            		} else {
-            			value.setText("N/A °F");
-            		}
             		switchType.setText("Switch to °C");
             	}
+            	
             	roundValue.setEnabled(true);
             }
         });
@@ -103,16 +107,10 @@ public class SensorView extends JPanel implements Observer {
         roundValue.addActionListener(new ActionListener() {
     
         	public void actionPerformed(ActionEvent e) {
-            	if (!value.getText().contains("N/A")) {
-            		double oldValue =  Double.parseDouble(value.getText().substring(0, value.getText().length()-3));
-            		String s = ((DecoratorRoundValue) roundDecorator).round(oldValue);
-                	if (scale.equals(TemperatureScale.CELSIUS)) {
-                		value.setText(s + " °C");
-                	} else {
-                		value.setText(s + " °F");
-                	}
-                	roundValue.setEnabled(false);
-            	}
+            	roundValueCommand.execute();
+            	update();
+            	
+            	roundValue.setEnabled(false);
         	}
         });
 
@@ -133,16 +131,7 @@ public class SensorView extends JPanel implements Observer {
     }
 
 	public void update() {
-		try {
-			String s = "" + typeDecorator.getValue();
-			if (scale.equals(TemperatureScale.CELSIUS)) {
-    			s += " °C";
-    		} else {
-    			s += " °F";
-    		}
-			value.setText(s);
-		} catch (SensorNotActivatedException e) {
-			e.printStackTrace();
-		}
+		getValueCommand.execute();
+		value.setText(getValueCommand.display());
 	}
 }
