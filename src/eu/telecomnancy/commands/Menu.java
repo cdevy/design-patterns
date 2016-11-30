@@ -13,8 +13,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 import eu.telecomnancy.helpers.ReadPropertyFile;
-import eu.telecomnancy.sensor.DecoratorFahrenheit;
-import eu.telecomnancy.sensor.DecoratorRoundValue;
+import eu.telecomnancy.sensor.DecoratorFahrenheitCreator;
+import eu.telecomnancy.sensor.DecoratorRoundValueCreator;
 import eu.telecomnancy.sensor.ISensor;
 
 @SuppressWarnings("serial")
@@ -36,11 +36,14 @@ public class Menu extends JMenuBar {
 				Class c = Class.forName(p.getProperty(i));
 				Class[] types = new Class[]{ISensor.class};
 				Constructor constructor = c.getConstructor(types);
+				
 				Command command;
 				if (c.equals(SwitchSensorScale.class)) {
-					command = (Command) constructor.newInstance(new DecoratorFahrenheit(s));
+					DecoratorFahrenheitCreator creator = new DecoratorFahrenheitCreator();
+					command = (Command) constructor.newInstance(creator.factoryMethod(s));
 				} else if (c.equals(RoundSensorValue.class)) {
-					command = (Command) constructor.newInstance(new DecoratorRoundValue(s));
+					DecoratorRoundValueCreator creator = new DecoratorRoundValueCreator();
+					command = (Command) constructor.newInstance(creator.factoryMethod(s));
 				} else {
 					command = (Command) constructor.newInstance(s);
 				}

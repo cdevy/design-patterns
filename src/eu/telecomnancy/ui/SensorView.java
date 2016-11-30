@@ -7,11 +7,14 @@ import eu.telecomnancy.commands.TurnSensorOff;
 import eu.telecomnancy.commands.TurnSensorOn;
 import eu.telecomnancy.commands.UpdateSensor;
 import eu.telecomnancy.sensor.DecoratorFahrenheit;
+import eu.telecomnancy.sensor.DecoratorFahrenheitCreator;
 import eu.telecomnancy.sensor.DecoratorRoundValue;
+import eu.telecomnancy.sensor.DecoratorRoundValueCreator;
 import eu.telecomnancy.sensor.ISensor;
 import eu.telecomnancy.sensor.TemperatureScale;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -38,15 +41,17 @@ public class SensorView extends JPanel implements Observer {
     public SensorView(ISensor c) {
         this.sensor = c;
         sensor.attach(this);
-        
-        switchType.setEnabled(false);
-    	roundValue.setEnabled(false);
-        
+     
+		DecoratorFahrenheitCreator creator1 = new DecoratorFahrenheitCreator();
+		DecoratorFahrenheit decorator1 = (DecoratorFahrenheit) creator1.factoryMethod(c);
+		DecoratorRoundValueCreator creator2 = new DecoratorRoundValueCreator();
+		DecoratorRoundValue decorator2 = (DecoratorRoundValue) creator2.factoryMethod(c);
+		
         turnOnCommand = new TurnSensorOn(sensor);
         turnOffCommand = new TurnSensorOff(sensor);
         updateCommand  = new UpdateSensor(sensor);
-        switchScaleCommand = new SwitchSensorScale(new DecoratorFahrenheit(sensor));
-        roundValueCommand = new RoundSensorValue(new DecoratorRoundValue(sensor));
+        switchScaleCommand = new SwitchSensorScale(decorator1);
+        roundValueCommand = new RoundSensorValue(decorator2);
         getValueCommand = new GetSensorValue(sensor);
         
         this.setLayout(new BorderLayout());
@@ -62,9 +67,6 @@ public class SensorView extends JPanel implements Observer {
             public void actionPerformed(ActionEvent e) {
             	turnOnCommand.execute();
             	update();
-           
-            	switchType.setEnabled(true);
-            	roundValue.setEnabled(true);
             }
         });
 
@@ -73,9 +75,6 @@ public class SensorView extends JPanel implements Observer {
             public void actionPerformed(ActionEvent e) {
             	turnOffCommand.execute();
             	update();
-            	
-            	switchType.setEnabled(false);
-            	roundValue.setEnabled(false);
             }
         });
 
@@ -83,8 +82,6 @@ public class SensorView extends JPanel implements Observer {
             
             public void actionPerformed(ActionEvent e) {
             	updateCommand.execute();
-            	
-            	roundValue.setEnabled(true);
             }
         });
         
@@ -99,8 +96,6 @@ public class SensorView extends JPanel implements Observer {
             	} else {
             		switchType.setText("Switch to °C");
             	}
-            	
-            	roundValue.setEnabled(true);
             }
         });
 
@@ -109,8 +104,6 @@ public class SensorView extends JPanel implements Observer {
         	public void actionPerformed(ActionEvent e) {
             	roundValueCommand.execute();
             	update();
-            	
-            	roundValue.setEnabled(false);
         	}
         });
 
